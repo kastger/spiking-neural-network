@@ -27,10 +27,10 @@ TRAINING_FILE = "iris-train.txt"
 TESTING_FILE = "iris-test.txt"
 
 # === Simulation time and epochs ===
-TRAINING_TIME = 22000.0 #ms
-TESTING_TIME = 5000.0 #ms
-EXAMPLE_TIME = 35.0 #ms
-TRAINING_EPOCHS = 6
+TRAINING_TIME = 20000.0 #ms
+TESTING_TIME = 4000.0 #ms
+EXAMPLE_TIME = 40.0 #ms
+TRAINING_EPOCHS = 8
 
 # === Number of neurons for each layer ===
 INPUT_LAYER_NEURONS = 404
@@ -52,7 +52,7 @@ FIRING_WEIGHT = 0.1
 """
 Function that reads the data from the file and converts each iris feature
 to an integer value between 0 and 100.
-Argument: string (file name)
+Parameters: string (file name)
 Returns an array
 """
 def read_file(fileName):
@@ -87,7 +87,7 @@ def read_file(fileName):
 
 """
 Function that initializes the PyNN simulated network
-Arguments: timestep (float),
+Parameters: timestep (float),
            min_delay (float),
            max_delay (float),
            debug (integer)
@@ -97,7 +97,7 @@ def initialize_network(timestep, min_delay, max_delay):
 
 """
 Function that creates a spike sequence for data file.
-Argument: data (array), startTime (float), learningOffSet (integer)
+Parameters: data (array), startTime (float), learningOffSet (integer)
 Returns: Generated nest simulator input and output spikes
              (array of 2 elements - [0] input [1] output)
 """
@@ -139,7 +139,7 @@ def create_spike_sequence(data, startTime, learningOffSet):
 """
 FOR NETWORK TESTING
 Function that creates a spike sequence for testing.
-Argument: data (array), startTime (float)
+Parameters: data (array), startTime (float)
 Returns: Generated PyNN.nest spikes
 """
 def create_test_spike_sequence(data, startTime):
@@ -161,7 +161,7 @@ def create_test_spike_sequence(data, startTime):
 """
 Function that calculates which neurons should be simulated for each iris data 
 feature and saves the connections in an array for later use.
-Arguments: iris data (whole line with all 4 features and a class)
+Parameters: iris data (whole line with all 4 features and a class)
            iris data line (which iris it is)
 Returns: an array of neuron connections
 """
@@ -184,7 +184,7 @@ def generate_feature_connections(dataItem, singleDataLine):
 """
 Function that makes a container of connections for layers using spike sequence 
 (presynaptic layer of neurons and postsynaptic layer of neurons).
-Arguments: PyNN.nest created spike sequence
+Parameters: PyNN.nest created spike sequence
            data (array)
            PyNN.nest input layer of neurons
            PyNN.nest output layer of neurons
@@ -219,7 +219,7 @@ def build_network_connections(spikeSequence, data, inputLayer, outputLayer):
 FOR NETWORK TESTING
 Function that makes a container of connections for input layer using 
 generated test spike sequence.
-Arguments: PyNN.nest created spike sequence
+Parameters: PyNN.nest created spike sequence
            data (array)
            PyNN.nest input layer of neurons
 """
@@ -237,7 +237,7 @@ def build_testing_connections(testSpikeSources, data, testInputLayer):
 
 """
 Function that connects presynaptic layer to postsynaptic layer using STDP synapses.
-Arguments: presynaptic pyNN population of neurons, postsynaptic population of neurons
+Parameters: presynaptic pyNN population of neurons, postsynaptic population of neurons
 """
 def connect_layers(firstLayer, secondLayer):
     # === Parameters for STDP mechanism ===
@@ -248,16 +248,16 @@ def connect_layers(firstLayer, secondLayer):
     tau_minus = 20.0
     
     # Amplitude of the positive part of the STDP curve.
-    A_plus = 0.005
+    A_plus = 0.004
     # Amplitude of the negative part of the STDP curve.
-    A_minus = 0.0025
+    A_minus = 0.003
 
     # === Weight dependence ===
 
     # Minimum synaptic weight
     w_min = 0.0
     # Maximum synaptic weight
-    w_max = 0.05
+    w_max = 0.03
     # Default weight
     w_default = 0.0
 
@@ -300,7 +300,7 @@ def connect_testing_layers(inputLayer, outputLayer, synapses):
 Function that lets user create a layer with defined number of neurons
 Neuron type: 'IF_cond_exp':
 Leaky integrate and fire model with fixed threshold and exponentially-decaying post-synaptic conductance.
-Arguments: a number of neurons (integer), name of the layer (string)
+Parameters: a number of neurons (integer), name of the layer (string)
 Returns: pyNN population of neurons (layer)
 """
 def create_layer_of_neurons(numberOfNeurons, label):
@@ -309,14 +309,14 @@ def create_layer_of_neurons(numberOfNeurons, label):
 
 """
 Function that records the spikes from the layer
-Argument: pyNN population of neurons (layer)
+Parameters: pyNN population of neurons (layer)
 """
 def record_spikes(layer):
     layer.record({'spikes', 'v'})
 
 """
 Function that saves the results of each layer spikes into a file
-Arguments: pyNN population of neurons (layer), file name (string)
+Parameters: pyNN population of neurons (layer), file name (string)
 """
 def save_results(layer, file):
     layer.write_data(file + '.pkl', 'spikes')
@@ -347,7 +347,7 @@ save_results(outputLayer, 'results/output')
 
 # Save the weights after training
 synapseWeights = synapses.get(["weight"], format="list")
-print(synapseWeights)
+#print(synapseWeights)
 
 sim.reset()
 # === Training is done, weights are saved and network is reset ===
