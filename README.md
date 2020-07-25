@@ -15,7 +15,10 @@ London, NW4 4BT\
 United Kingdom
 
 ## Disseration theme:
-"Learning with spiking neural networks"
+**Learning with spiking neural networks**
+
+A spiking neural network that uses spike-timing-dependent plasticity (STDP) synapses for training on half of UCI iris data set
+and then runs tests on the other half of the data
 
 ## Requirements (what I used during implementation)
 * Linux Ubuntu Distribution 16.04 (xenus) x64
@@ -23,7 +26,7 @@ United Kingdom
 * Conda 4.8.2 (https://docs.conda.io/projects/conda/en/latest/index.html)
 * PyNN 0.9.5 (http://neuralensemble.org/docs/PyNN/)
 * Numpy 1.19.1 (https://numpy.org/)
-* Iris dataset (https://archive.ics.uci.edu/ml/datasets/iris)
+* UCI iris dataset (https://archive.ics.uci.edu/ml/datasets/iris)
 
 ## About the program:
 **snn-stdp.py** is the main program, all the info about the program is inside the file commented at the top.\
