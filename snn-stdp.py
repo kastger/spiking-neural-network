@@ -5,6 +5,7 @@ get-networks-accuracy.py
 read-pkl-spikes.py
 iris-train.txt
 iris-test.txt
+README.md
 
 Files generated after training:
 results/input.pkl
@@ -15,7 +16,7 @@ results/inputTest.pkl
 results/outputTest.pkl
 
 Author: Geraldas Kastauna
-Supervisor: Professor Chris Huyck (https://www.cwa.mdx.ac.uk/chris/chrisroot.html)
+Supervisor: Professor Dr. Chris Huyck (https://www.cwa.mdx.ac.uk/chris/chrisroot.html)
 Email: GK468@live.mdx.ac.uk OR geraldaskastauna@gmail.com
 
 Middlesex University, London Campus
