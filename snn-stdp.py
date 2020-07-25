@@ -3,6 +3,8 @@ FILES IN PACKAGE:
 snn-stdp.py
 get-networks-accuracy.py
 read-pkl-spikes.py
+iris-train.txt
+iris-test.txt
 
 Files generated after training:
 results/input.pkl
