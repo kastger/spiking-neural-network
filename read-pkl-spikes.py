@@ -73,4 +73,4 @@ def print_pkl_spikes(fileName):
 #print_pkl_spikes(TESTING_INPUT_SPIKES_FILE)
 print_pkl_spikes(TESTING_OUTPUT_SPIKES_FILE)
 
-# === END OF PROGRAM ===
+# === End of program ===

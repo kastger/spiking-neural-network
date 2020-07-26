@@ -209,7 +209,7 @@ def get_networks_accuracy(systemAnswers, correctAnswers):
     print("\nCorrect system answers:", countCorrectGuesses, "/", totalAnswers)
     print("Accuracy percentage:", accuracyPercentage, "%")
 
-# === Main =====================================================================
+# === Main ===
 
 correctAnswers = get_correct_iris_answers(TESTING_FILE)
 spikeTimes = read_iris_result_spikes_file(TESTING_RESULTS_FILE, START_TIME)
@@ -219,4 +219,4 @@ systemAnswers = convert_rates_to_answers(firingRates)
 # === Print the correct answers and accuracy percentage ===
 get_networks_accuracy(systemAnswers, correctAnswers)
 
-# ==============================================================================
+# === End of program ===

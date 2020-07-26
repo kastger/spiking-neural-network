@@ -394,4 +394,4 @@ save_results(testInputLayer, 'results/inputTest')
 save_results(testOutputLayer, 'results/outputTest')
 
 sim.reset()
-# === END OF PROGRAM ===
+# === End of program ===
