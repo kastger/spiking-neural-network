@@ -82,6 +82,24 @@ def read_iris_result_spikes_file(fileName, testStartTime):
     return timeResults
 
 """
+Function that gets the correct answers from iris data file
+Parameters: fileName (string)
+Returns: array full of integer values (1 to 3)
+"""
+def get_correct_iris_answers(fileName):
+    answers = []
+    
+    # Open file using CSV file reader
+    dataFileHandle = list(csv.reader(open(fileName)))
+    totalIrises = len(dataFileHandle)
+
+    # Loop through test iris data and save the answers into an array
+    for iris in range(0, totalIrises):
+        answer = int(dataFileHandle[iris][4])
+        answers = answers + [answer]
+    return answers
+
+"""
 Function that calculates firing rates in a neuron taking testStartTime
 (for what time the spikes should be ignored) and exampleTime () 
 variables into consideration and saves systems answers into an array. 
@@ -96,8 +114,10 @@ Returns: answer (array containing amount of firing spikes,)
 """
 def calculate_firing_rate(outputNeuronNumber, totalNumberOfSpikesInANeuron, 
                                             spikeSequence, testStartTime, exampleTime):
+    totalTestIrises = len(get_correct_iris_answers(TESTING_FILE))
+
     # Create an array full of zeros with the size of the testing data file
-    answer = np.zeros(75)
+    answer = np.zeros(totalTestIrises)
 
     # Loop through first neuron spike sequence
     for spikeTime in range(0, totalNumberOfSpikesInANeuron):
@@ -105,7 +125,7 @@ def calculate_firing_rate(outputNeuronNumber, totalNumberOfSpikesInANeuron,
         baseTime = actualSpikeTime - testStartTime
         irisNumber = baseTime / exampleTime
         irisNumber = int(irisNumber)
-        if (irisNumber >= 75):
+        if (irisNumber >= totalTestIrises):
             print('Ignoring firing in class ', outputNeuronNumber, 
                             "actual spike time: ", actualSpikeTime)
         else:
@@ -171,24 +191,6 @@ def convert_rates_to_answers(firingRates):
     return answers
 
 """
-Function that gets the correct answers from iris data file
-Parameters: fileName (string)
-Returns: array full of integer values (1 to 3)
-"""
-def get_correct_iris_answers(fileName):
-    answers = []
-    
-    # Open file using CSV file reader
-    dataFileHandle = list(csv.reader(open(fileName)))
-    totalIrises = len(dataFileHandle)
-
-    # Loop through test iris data and save the answers into an array
-    for iris in range(0, totalIrises):
-        answer = int(dataFileHandle[iris][4])
-        answers = answers + [answer]
-    return answers
-
-"""
 Function that counts the amount of correct system answers and 
 accuracy percentage and prints it to the console.
 Parameters: systemAnswers (array of integers),
@@ -210,10 +212,9 @@ def get_networks_accuracy(systemAnswers, correctAnswers):
     print("Accuracy percentage:", accuracyPercentage, "%")
 
 # === Main ===
-
 correctAnswers = get_correct_iris_answers(TESTING_FILE)
-spikeTimes = read_iris_result_spikes_file(TESTING_RESULTS_FILE, START_TIME)
-firingRates = save_firing_rate_of_each_neuron(spikeTimes, START_TIME, EXAMPLE_TIME)
+spikeSequence = read_iris_result_spikes_file(TESTING_RESULTS_FILE, START_TIME)
+firingRates = save_firing_rate_of_each_neuron(spikeSequence, START_TIME, EXAMPLE_TIME)
 systemAnswers = convert_rates_to_answers(firingRates)
 
 # === Print the correct answers and accuracy percentage ===

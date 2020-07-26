@@ -43,7 +43,7 @@ TRAINING_FILE = "iris-train.txt"
 TESTING_FILE = "iris-test.txt"
 
 # === Simulation time and epochs ===
-TRAINING_TIME = 25000.0 #ms
+TRAINING_TIME = 28000.0 #ms
 TESTING_TIME = 4000.0 #ms
 EXAMPLE_TIME = 50.0 #ms
 TRAINING_EPOCHS = 6
@@ -51,6 +51,7 @@ TRAINING_EPOCHS = 6
 # === Number of neurons for each layer ===
 INPUT_LAYER_NEURONS = 404
 OUTPUT_LAYER_NEURONS = 3
+
 numberOfIrisClasses = 3 # iris-setosa, iris-versicolour, iris-virginica
 synapses = 0 # Used to save weights during training
 
@@ -74,7 +75,10 @@ def read_file(fileName):
     data = []
     # Open file using CSV file reader
     dataFileHandle = list(csv.reader(open(fileName)))
-    for lineNumber in range (0,75):
+    totalIrises = len(dataFileHandle)
+
+    # Loop through all irises
+    for lineNumber in range (0, totalIrises):
         # Sepal length feature
         sepal_length = float(dataFileHandle[lineNumber][0])
         sepal_length = int(sepal_length*10)
