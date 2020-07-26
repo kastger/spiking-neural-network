@@ -43,10 +43,10 @@ TRAINING_FILE = "iris-train.txt"
 TESTING_FILE = "iris-test.txt"
 
 # === Simulation time and epochs ===
-TRAINING_TIME = 20000.0 #ms
+TRAINING_TIME = 25000.0 #ms
 TESTING_TIME = 4000.0 #ms
-EXAMPLE_TIME = 40.0 #ms
-TRAINING_EPOCHS = 8
+EXAMPLE_TIME = 50.0 #ms
+TRAINING_EPOCHS = 6
 
 # === Number of neurons for each layer ===
 INPUT_LAYER_NEURONS = 404

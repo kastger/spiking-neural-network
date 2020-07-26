@@ -2,7 +2,7 @@
 
 ## Author:
 Geraldas Kastauna\
-https://www.geraldaskastauna.com
+http://www.geraldaskastauna.com
 
 ## Project supervisor:
 Professor Dr. Chris Huyck\
