@@ -25,7 +25,7 @@ and then runs tests on the other half of the data.
 * Python 3.8.3 (https://www.python.org/downloads/)
 * Conda 4.8.2 (https://docs.conda.io/projects/conda/en/latest/index.html)
 * PyNN 0.9.5 (http://neuralensemble.org/docs/PyNN/)
-* Nest-Simulator 2.20.0 (https://nest-simulator.org/)
+* NEST-simulator 2.20.0 (https://nest-simulator.org/)
 * Numpy 1.19.1 (https://numpy.org/)
 * UCI iris dataset (https://archive.ics.uci.edu/ml/datasets/iris)
 
