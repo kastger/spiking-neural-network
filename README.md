@@ -53,10 +53,10 @@ Accuracy percentage: **82.66666666666667 %**
 
 **Speed**\
 Tested speed using Linux terminal command - **time python snn-stdp.py**\
-Results were the same for both cases:
+Results were the same for both cases:\
 real    0m **3.234s**\
 user    0m **3.137s**\
-sys     0m **0.096s**\
+sys     0m **0.096s**
 
 ## How to use:
 1. Check if there are **iris-train.txt** and **iris-test.txt** files.
