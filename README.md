@@ -25,7 +25,7 @@ and then runs tests on the other half of the data.
 * Python 3.8.3 (https://www.python.org/downloads/)
 * Conda 4.8.2 (https://docs.conda.io/projects/conda/en/latest/index.html)
 * PyNN 0.9.5 (http://neuralensemble.org/docs/PyNN/)
-* Nest-Simulator 2.20.0 (https://nest-simulator.org/)
+* NEST-simulator 2.20.0 (https://nest-simulator.org/)
 * Numpy 1.19.1 (https://numpy.org/)
 * UCI iris dataset (https://archive.ics.uci.edu/ml/datasets/iris)
 
@@ -57,7 +57,7 @@ Tested speed using Linux terminal command - **time python snn-stdp.py**\
 Results were the same for both cases:\
 real    0m **3.234s**\
 user    0m **3.137s**\
-sys     0m **0.096s**\
+sys     0m **0.096s**
 
 ## How to use:
 1. Check if there are **iris-train.txt** and **iris-test.txt** files.
