@@ -37,12 +37,12 @@ import csv
 
 # === File names ===
 TESTING_RESULTS_FILE = 'results/outputTest.pkl'
-TESTING_FILE = 'iris-test.txt'
+TESTING_FILE = 'iris-train.txt'
 
 # === Time variables ===
 # EXAMPLE_TIME should be the same as in snn-stdp.py used during training
-EXAMPLE_TIME = 50.0 #ms
-START_TIME = 0.0 #ms
+EXAMPLE_TIME = 40.0 #ms
+START_TIME = 10.0 #ms
 
 # === Functions ===
 """

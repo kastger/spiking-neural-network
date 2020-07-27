@@ -39,32 +39,38 @@ import pyNN.nest as sim
 
 # === Parameters for spiking neural network ===
 # === Text files ===
-TRAINING_FILE = "iris-train.txt"
-TESTING_FILE = "iris-test.txt"
+TRAINING_FILE = "iris-test.txt"
+TESTING_FILE = "iris-train.txt"
 
 # === Simulation time and epochs ===
-TRAINING_TIME = 28000.0 #ms
+TRAINING_TIME = 10000.0 #ms
 TESTING_TIME = 4000.0 #ms
-EXAMPLE_TIME = 50.0 #ms
+EXAMPLE_TIME = 40.0 #ms
+
 TRAINING_EPOCHS = 6
 
+TRAINING_START_TIME = 10.0 #ms (error when 0)
+TESTING_START_TIME = 10.0 #ms
+
 # === Number of neurons for each layer ===
-INPUT_LAYER_NEURONS = 404
+INPUT_LAYER_NEURONS = 104
 OUTPUT_LAYER_NEURONS = 3
+
+NEURONS_PER_FEATURE = 26
 
 numberOfIrisClasses = 3 # iris-setosa, iris-versicolour, iris-virginica
 synapses = 0 # Used to save weights during training
 
 # === Variables for network initialization ===
-TIME_STEP = 1.0
-MIN_DELAY = 1.0
-MAX_DELAY = 1.0
+TIME_STEP = 1.0 #ms
+MIN_DELAY = 1.0 #ms
+MAX_DELAY = 1.0 #ms
+LEARNING_OFFSET = 1.0
 
 # === Firing weight for connections ===
 FIRING_WEIGHT = 0.1
 
 # === Functions ===
-
 """
 Function that reads the data from the file and converts each iris feature
 to an integer value between 0 and 100.
@@ -81,19 +87,19 @@ def read_file(fileName):
     for lineNumber in range (0, totalIrises):
         # Sepal length feature
         sepal_length = float(dataFileHandle[lineNumber][0])
-        sepal_length = int(sepal_length*10)
+        sepal_length = int(sepal_length * 10)
 
         # Sepal width feature
         sepal_width = float(dataFileHandle[lineNumber][1])
-        sepal_width = int(sepal_width*10)
+        sepal_width = int(sepal_width * 10)
 
         # Petal length feature
         petal_length = float(dataFileHandle[lineNumber][2])
-        petal_length = int(petal_length*10)
+        petal_length = int(petal_length * 10)
 
         # Petal width feature
         petal_width = float(dataFileHandle[lineNumber][3])
-        petal_width = int(petal_width*10)
+        petal_width = int(petal_width * 10)
 
         # Class
         iris_class = int(dataFileHandle[lineNumber][4])
@@ -111,8 +117,8 @@ Parameters: timestep (float),
            max_delay (float),
            debug (integer)
 """
-def initialize_network(timestep, min_delay, max_delay):
-    sim.setup(timestep = timestep, min_delay = min_delay, max_delay = max_delay)
+def initialize_network(timeStep, min_delay, max_delay):
+    sim.setup(timestep = timeStep, min_delay = min_delay, max_delay = max_delay)
 
 """
 Function that creates a spike sequence for data file.
@@ -130,12 +136,12 @@ def create_spike_sequence(data, startTime, learningOffSet):
     inputSpikeTimesSequence = []
     outputSpikeTimesSequence = []
 
-    for element in range(0, numberOfDataElements):
+    for element in range (0, numberOfDataElements):
         # Empty arrays to store spike times
         inputSpikeTimes = []
         outputSpikeTimes = []
 
-        for epoch in range (0,TRAINING_EPOCHS): 
+        for epoch in range (0, TRAINING_EPOCHS): 
             # Calculate the timing of spikes for input layer and store them into inputSpikeTimes
             inputSpikeTime = startTime + (element * EXAMPLE_TIME) + (epoch * epochTime)
             inputSpikeTimes = inputSpikeTimes + [inputSpikeTime]
@@ -189,7 +195,6 @@ Returns: an array of neuron connections
 """
 def generate_feature_connections(dataItem, irisNumberOnTheList):
     inputConnector = []
-    neuronsPerInputFeature = 101
 
     # Loop through all iris features
     for dataFeature in range (0,4):
@@ -197,8 +202,8 @@ def generate_feature_connections(dataItem, irisNumberOnTheList):
 
         # Loop through neurons in range that depends on feature numerical value
         for neuron in range((dataFeatureValue - numberOfIrisClasses), (dataFeatureValue + numberOfIrisClasses + 1)):
-            if ((neuron >= 0) and (neuron < neuronsPerInputFeature)):
-                toNeuron = neuron + (dataFeature * neuronsPerInputFeature)
+            if ((neuron >= 0) and (neuron < NEURONS_PER_FEATURE)):
+                toNeuron = neuron + (dataFeature * NEURONS_PER_FEATURE)
                 inputConnector = inputConnector + [(irisNumberOnTheList, toNeuron, FIRING_WEIGHT, TIME_STEP)]
 
     return inputConnector
@@ -265,6 +270,8 @@ Parameters: presynaptic pyNN.nest population of neurons,
 def connect_layers(firstLayer, secondLayer):
     # === Parameters for STDP mechanism ===
 
+    # === Timing dependence ===
+
     # Time constant of the positive part of the STDP curve, in milliseconds.
     tau_plus = 20.0
     # Time constant of the negative part of the STDP curve, in milliseconds.
@@ -280,7 +287,7 @@ def connect_layers(firstLayer, secondLayer):
     # Minimum synaptic weight
     w_min = 0.0
     # Maximum synaptic weight
-    w_max = 0.03
+    w_max = 0.1
     # Default weight
     w_default = 0.0
 
@@ -356,7 +363,7 @@ irisTestingData = read_file(TESTING_FILE)
 # === Initialize the network for training ===
 initialize_network(TIME_STEP, MIN_DELAY, MAX_DELAY)
 
-spikeSequence = create_spike_sequence(irisTrainingData, 10.0, 1)
+spikeSequence = create_spike_sequence(irisTrainingData, TRAINING_START_TIME, LEARNING_OFFSET)
 inputLayer = create_layer_of_neurons(INPUT_LAYER_NEURONS, 'input layer')
 outputLayer = create_layer_of_neurons(OUTPUT_LAYER_NEURONS, 'output layer')
 
@@ -373,6 +380,8 @@ save_results(outputLayer, 'results/output')
 
 # Save the weights after training
 synapseWeights = synapses.get(["weight"], format="list")
+
+# Can print it to console to check for inactive neurons
 #print(synapseWeights)
 
 sim.reset()
@@ -380,7 +389,7 @@ sim.reset()
 # === Test the network ===
 initialize_network(TIME_STEP, MIN_DELAY, MAX_DELAY)
 
-testSpikeSequence = create_test_spike_sequence(irisTestingData, 0)
+testSpikeSequence = create_test_spike_sequence(irisTestingData, TESTING_START_TIME)
 testInputLayer = create_layer_of_neurons(INPUT_LAYER_NEURONS, 'test input layer')
 testOutputLayer = create_layer_of_neurons(OUTPUT_LAYER_NEURONS, 'test output layer')
 
