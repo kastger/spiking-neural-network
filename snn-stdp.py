@@ -39,8 +39,8 @@ import pyNN.nest as sim
 
 # === Parameters for spiking neural network ===
 # === Text files ===
-TRAINING_FILE = "iris-test.txt"
-TESTING_FILE = "iris-train.txt"
+TRAINING_FILE = "iris-train.txt"
+TESTING_FILE = "iris-test.txt"
 
 # === Simulation time and epochs ===
 TRAINING_TIME = 10000.0 #ms

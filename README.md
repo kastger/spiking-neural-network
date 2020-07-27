@@ -42,13 +42,20 @@ This SNN uses only two layers of neurons:\
 * Postsynaptic layer which contains 3 neurons (each neuron represents one of three iris class).
 
 ## Accuracy and speed:
+**Accuracy**\
 Best accuracy I managed to get:
 * Training on **iris-train.txt** data and testing on **iris-test.txt**
 Correct system answers: 66 / 75\
-Accuracy percentage: 88.0 %\
+Accuracy percentage: **88.0 %**
 * Training on **iris-test.txt** data and testing on **iris-train.txt**
 Correct system answers: 62 / 75\
-Accuracy percentage: 82.66666666666667 %
+Accuracy percentage: **82.66666666666667 %**\
+**Speed**
+Tested speed using Linux terminal command - **time python snn-stdp.py**\
+Results were the same for both cases:\
+* real    0m 3.234s
+* user    0m 3.137s
+* sys     0m 0.096s
 
 ## How to use:
 1. Check if there are **iris-train.txt** and **iris-test.txt** files.

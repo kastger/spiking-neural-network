@@ -37,7 +37,7 @@ import csv
 
 # === File names ===
 TESTING_RESULTS_FILE = 'results/outputTest.pkl'
-TESTING_FILE = 'iris-train.txt'
+TESTING_FILE = 'iris-test.txt'
 
 # === Time variables ===
 # EXAMPLE_TIME should be the same as in snn-stdp.py used during training
