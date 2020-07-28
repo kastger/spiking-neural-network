@@ -278,9 +278,9 @@ def connect_layers(firstLayer, secondLayer):
     tau_minus = 20.0
     
     # Amplitude of the positive part of the STDP curve.
-    A_plus = 0.004
+    A_plus = 0.006
     # Amplitude of the negative part of the STDP curve.
-    A_minus = 0.003
+    A_minus = 0.0055
 
     # === Weight dependence ===
 

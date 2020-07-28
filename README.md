@@ -49,8 +49,9 @@ Best accuracy I managed to get:
 Correct system answers: 72 / 75\
 Accuracy percentage: **96.00 %**
 * Training on **iris-test.txt** data and testing on **iris-train.txt**
-Correct system answers: 60 / 75\
-Accuracy percentage: **80.00 %**
+Correct system answers: 62 / 75\
+Accuracy percentage: **82.67 %**\
+**AVERAGE ACCURACY: 89.335%**\
 
 **Speed**\
 Tested speed using Linux terminal command - **time python snn-stdp.py**\
