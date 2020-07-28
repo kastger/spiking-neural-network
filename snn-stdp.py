@@ -43,11 +43,11 @@ TRAINING_FILE = "iris-train.txt"
 TESTING_FILE = "iris-test.txt"
 
 # === Simulation time and epochs ===
-TRAINING_TIME = 10000.0 #ms
+TRAINING_TIME = 8000.0 #ms
 TESTING_TIME = 4000.0 #ms
-EXAMPLE_TIME = 40.0 #ms
+FIRING_PERIOD = 27.0 #ms
 
-TRAINING_EPOCHS = 6
+TRAINING_EPOCHS = 5
 
 TRAINING_START_TIME = 10.0 #ms (error when 0)
 TESTING_START_TIME = 10.0 #ms
@@ -62,9 +62,9 @@ numberOfIrisClasses = 3 # iris-setosa, iris-versicolour, iris-virginica
 synapses = 0 # Used to save weights during training
 
 # === Variables for network initialization ===
-TIME_STEP = 1.0 #ms
-MIN_DELAY = 1.0 #ms
-MAX_DELAY = 1.0 #ms
+TIME_STEP = 0.1 #ms
+MIN_DELAY = 0.1 #ms
+MAX_DELAY = 0.1 #ms
 LEARNING_OFFSET = 1.0
 
 # === Firing weight for connections ===
@@ -117,8 +117,8 @@ Parameters: timestep (float),
            max_delay (float),
            debug (integer)
 """
-def initialize_network(timeStep, min_delay, max_delay):
-    sim.setup(timestep = timeStep, min_delay = min_delay, max_delay = max_delay)
+def initialize_network(time_step, min_delay, max_delay):
+    sim.setup(timestep = time_step, min_delay = min_delay, max_delay = max_delay)
 
 """
 Function that creates a spike sequence for data file.
@@ -130,7 +130,7 @@ Returns: Generated nest simulator input and output spikes
 """
 def create_spike_sequence(data, startTime, learningOffSet):
     numberOfDataElements = len(data)
-    epochTime = EXAMPLE_TIME * numberOfDataElements
+    epochTime = FIRING_PERIOD * numberOfDataElements
 
     # Empty arrays to store spike sequences
     inputSpikeTimesSequence = []
@@ -143,7 +143,7 @@ def create_spike_sequence(data, startTime, learningOffSet):
 
         for epoch in range (0, TRAINING_EPOCHS): 
             # Calculate the timing of spikes for input layer and store them into inputSpikeTimes
-            inputSpikeTime = startTime + (element * EXAMPLE_TIME) + (epoch * epochTime)
+            inputSpikeTime = startTime + (element * FIRING_PERIOD) + (epoch * epochTime)
             inputSpikeTimes = inputSpikeTimes + [inputSpikeTime]
 
             # Calculate the timing of spikes for output layer and store them into outputSpikeTimes
@@ -177,7 +177,7 @@ def create_test_spike_sequence(data, startTime):
     # Loop through all data elements (75 for iris test data)
     for element in range (0, numberDataItems):
         # Calculate the test timing of spikes for each element and store them into testSpikeTimesSequnece
-        testSpikeTimes = [[startTime + (element * EXAMPLE_TIME)]]
+        testSpikeTimes = [[startTime + (element * FIRING_PERIOD)]]
         testSpikeTimesSequence = testSpikeTimesSequence + testSpikeTimes
 
     # Generate spikes for testing with previously stored spike times
@@ -291,6 +291,9 @@ def connect_layers(firstLayer, secondLayer):
     # Default weight
     w_default = 0.0
 
+    # === Delay ===
+    delay = 0.1
+
     # Synapses to use later for testing
     global synapses
     
@@ -300,9 +303,9 @@ def connect_layers(firstLayer, secondLayer):
         timing_dependence = sim.SpikePairRule(tau_plus = tau_plus, tau_minus = tau_minus,
                                               A_plus = A_plus, A_minus = A_minus),
         weight_dependence = sim.AdditiveWeightDependence(w_min = w_min, w_max = w_max),
-        dendritic_delay_fraction = float(1),
+        dendritic_delay_fraction = 1.0,
         weight = w_default,
-        delay  = 1.0)
+        delay  = delay)
 
     # Save synapses onto a global variable
     synapses = sim.Projection(inputLayer, outputLayer, sim.AllToAllConnector(), synapse_type = stdp_synapse)

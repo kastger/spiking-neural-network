@@ -28,7 +28,7 @@ About this program:
 This program reads the spikes of the output file (outputTest.pkl) that was generated 
 after testing in snn-stdp.py program. Converts those spikes to answers and calculates
 the accuracy of the network by comparing system generated answers to correct answer
-in iris-test.txt file. Print total correct answers and accuracy percentage to the console
+in iris-test.txt file. Prints total correct answers and accuracy percentage to the console
 """
 # === Dependencies ===
 import numpy as np
@@ -40,8 +40,8 @@ TESTING_RESULTS_FILE = 'results/outputTest.pkl'
 TESTING_FILE = 'iris-test.txt'
 
 # === Time variables ===
-# EXAMPLE_TIME should be the same as in snn-stdp.py used during training
-EXAMPLE_TIME = 40.0 #ms
+# FIRING_PERIOD should be the same as in snn-stdp.py used during training
+FIRING_PERIOD = 27.0 #ms
 START_TIME = 10.0 #ms
 
 # === Functions ===
@@ -214,7 +214,7 @@ def get_networks_accuracy(systemAnswers, correctAnswers):
 # === Main ===
 correctAnswers = get_correct_iris_answers(TESTING_FILE)
 spikeSequence = read_iris_result_spikes_file(TESTING_RESULTS_FILE, START_TIME)
-firingRates = save_firing_rate_of_each_neuron(spikeSequence, START_TIME, EXAMPLE_TIME)
+firingRates = save_firing_rate_of_each_neuron(spikeSequence, START_TIME, FIRING_PERIOD)
 systemAnswers = convert_rates_to_answers(firingRates)
 
 # === Print the correct answers and accuracy percentage ===
