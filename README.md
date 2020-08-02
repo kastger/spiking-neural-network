@@ -45,13 +45,13 @@ This SNN uses only two layers of neurons:\
 ## Accuracy and speed:
 **Accuracy**\
 Best accuracy I managed to get:
-* Training on **iris-train.txt** data and testing on **iris-test.txt**
+* Training on **iris-train.txt** data and testing on **iris-test.txt:**\
 Correct system answers: 72 / 75\
 Accuracy percentage: **96.00 %**
-* Training on **iris-test.txt** data and testing on **iris-train.txt**
+* Training on **iris-test.txt** data and testing on **iris-train.txt:**\
 Correct system answers: 62 / 75\
 Accuracy percentage: **82.67 %**\
-**AVERAGE ACCURACY: 89.335%**\
+**AVERAGE ACCURACY: 89.335%**
 
 **Speed**\
 Tested speed using Linux terminal command - **time python snn-stdp.py**\
