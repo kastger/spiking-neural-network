@@ -66,7 +66,7 @@ def read_file(fileName):
     dataFileHandle = list(csv.reader(open(fileName)))
     totalWines = len(dataFileHandle)
 
-    # Loop through all irises
+    # Loop through all wines
     for lineNumber in range (0, totalWines):
         wine_class = int(dataFileHandle[lineNumber][0])
         alcohol = float(dataFileHandle[lineNumber][1])
