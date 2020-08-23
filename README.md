@@ -69,6 +69,10 @@ and then run the code and check the console for neuron number and spike time seq
 5. To get the accuracy on test file (iris-test.txt) run **get-networks-accuracy.py**.
 The amount of correct answers will be printed to the console along with accuracy percentage.
 
+## Further studies:
+My thesis supervisor Professor Dr. Chris Huyck offered me to team up with him and study learning with spiking neural networks deeper.\
+I will be working on this during my freetime.
+
 ## Contact info:
 **University email:** GK468@live.mdx.ac.uk\
 **Personal:** geraldaskastauna@gmail.com
