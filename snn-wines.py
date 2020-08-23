@@ -1,6 +1,11 @@
 """
 FILES IN PACKAGE:
 snn.py
+wine.data
+wine.names
+wine-test.txt
+wine-train.txt
+wine-accuracy.py
 
 Author: Geraldas Kastauna
 Email: GK468@live.mdx.ac.uk OR geraldaskastauna@gmail.com
@@ -27,22 +32,22 @@ TRAINING_FILE = "wine-train.txt"
 TESTING_FILE = "wine-test.txt"
 
 # === Simulation time and epochs ===
-TRAINING_TIME = 14000.0 #ms
-TESTING_TIME = 6000.0 #ms
-FIRING_PERIOD = 27.0 #ms
+TRAINING_TIME = 50000.0 #ms
+TESTING_TIME = 15000.0 #ms
+FIRING_PERIOD = 40.0 #ms
 
-TRAINING_EPOCHS = 7
+TRAINING_EPOCHS = 20
 
 TRAINING_START_TIME = 10.0 #ms (error when 0)
 TESTING_START_TIME = 10.0 #ms
 
 # === Number of neurons for each layer ===
-INPUT_LAYER_NEURONS = 104
+INPUT_LAYER_NEURONS = 520
 OUTPUT_LAYER_NEURONS = 3
 
 NEURONS_PER_FEATURE = 26
 
-numberOfWineClasses = 3 # iris-setosa, iris-versicolour, iris-virginica
+numberOfWineClasses = 3
 synapses = 0 # Used to save weights during training
 
 # === Variables for network initialization ===
@@ -56,7 +61,7 @@ FIRING_WEIGHT = 0.1
 
 # === Functions ===
 """
-Function that reads the wine data from the file.
+Function that reads the wine data from the file and converts to integer values.
 Parameters: string (file name)
 Returns an array
 """
@@ -69,18 +74,42 @@ def read_file(fileName):
     # Loop through all wines
     for lineNumber in range (0, totalWines):
         wine_class = int(dataFileHandle[lineNumber][0])
+
         alcohol = float(dataFileHandle[lineNumber][1])
+        alcohol = int(alcohol * 100)
+
         malic_acid = float(dataFileHandle[lineNumber][2])
+        malic_acid = int(malic_acid * 100)
+
         ash = float(dataFileHandle[lineNumber][3])
+        ash = int(ash * 100)
+
         alcalinity_of_ash = float(dataFileHandle[lineNumber][4])
+        alcalinity_of_ash = int(alcalinity_of_ash * 100)
+
         magnesium = int(dataFileHandle[lineNumber][5])
+
         total_phenols = float(dataFileHandle[lineNumber][6])
+        total_phenols = int(total_phenols * 100)
+
         flavanoids = float(dataFileHandle[lineNumber][7])
+        flavanoids = int(flavanoids * 100)
+
         nonflavanoid_phenols = float(dataFileHandle[lineNumber][8])
+        nonflavanoid_phenols = int(nonflavanoid_phenols * 100)
+
         proanthocyanins = float(dataFileHandle[lineNumber][9])
+        proanthocyanins = int(proanthocyanins * 100)
+
         color_intensity = float(dataFileHandle[lineNumber][10])
+        color_intensity = int(color_intensity * 100)
+
         hue = float(dataFileHandle[lineNumber][11])
+        hue = int(hue * 100)
+
         wines_od = float(dataFileHandle[lineNumber][12])
+        wines_od = int(wines_od * 100)
+
         proline = int(dataFileHandle[lineNumber][13])
 
         # Add each line to data array
@@ -156,7 +185,7 @@ def create_test_spike_sequence(data, startTime):
     numberDataItems = len(data)
     testSpikeTimesSequence = []
 
-    # Loop through all data elements (75 for iris test data)
+    # Loop through all data elements (89 for wine test data)
     for element in range (0, numberDataItems):
         # Calculate the test timing of spikes for each element and store them into testSpikeTimesSequnece
         testSpikeTimes = [[startTime + (element * FIRING_PERIOD)]]
@@ -169,24 +198,25 @@ def create_test_spike_sequence(data, startTime):
     return generatedTestSpikes
 
 """
-Function that calculates which neurons should be simulated for each iris data 
+Function that calculates which neurons should be simulated for each wine data 
 feature and saves the connections in an array for later use.
-Parameters: dataItem (array which has whole iris line with all 4 features and a class)
-            irisNumberOnTheList (integer that represents iris number on the list)
+Parameters: dataItem (array which has whole wine line with all 13 features and a class)
+            irisNumberOnTheList (integer that represents wine number on the list)
 Returns: an array of neuron connections
 """
-def generate_feature_connections(dataItem, irisNumberOnTheList):
+def generate_feature_connections(dataItem, wineNumberOnTheList):
     inputConnector = []
+    total_features = len(dataItem)
 
-    # Loop through all iris features
-    for dataFeature in range (0,4):
+    # Loop through all wine features
+    for dataFeature in range (0, total_features):
         dataFeatureValue = dataItem[dataFeature]
 
         # Loop through neurons in range that depends on feature numerical value
-        for neuron in range((dataFeatureValue - numberOfIrisClasses), (dataFeatureValue + numberOfIrisClasses + 1)):
+        for neuron in range((dataFeatureValue - numberOfWineClasses), (dataFeatureValue + numberOfWineClasses + 1)):
             if ((neuron >= 0) and (neuron < NEURONS_PER_FEATURE)):
                 toNeuron = neuron + (dataFeature * NEURONS_PER_FEATURE)
-                inputConnector = inputConnector + [(irisNumberOnTheList, toNeuron, FIRING_WEIGHT, TIME_STEP)]
+                inputConnector = inputConnector + [(wineNumberOnTheList, toNeuron, FIRING_WEIGHT, TIME_STEP)]
 
     return inputConnector
 
@@ -207,19 +237,19 @@ def build_network_connections(spikeSequence, data, inputLayer, outputLayer):
     totalNumberOfDataItems = len(data)
 
     # Loop through all data items
-    for eachIris in range(0, totalNumberOfDataItems):
-        dataItem = data[eachIris]
+    for eachWine in range(0, totalNumberOfDataItems):
+        dataItem = data[eachWine]
 
         # === Presynaptic layer ==
         # Gets presynaptic connections for each data item
-        inputConnector = generate_feature_connections(dataItem, eachIris)
+        inputConnector = generate_feature_connections(dataItem, eachWine)
         inputFromListConnector = sim.FromListConnector(inputConnector)
         sim.Projection(inputSpikeSequence, inputLayer, inputFromListConnector, 
                    receptor_type='excitatory')
 
         # === Postsynaptic layer ===
-        outputClass = dataItem[4] - 1 # -1 so the classes are from 0, 1 and 2.
-        outputConnector = [(eachIris, outputClass, FIRING_WEIGHT, TIME_STEP)] 
+        outputClass = dataItem[0] - 1 # -1 so the classes are from 0, 1 and 2.
+        outputConnector = [(eachWine, outputClass, FIRING_WEIGHT, TIME_STEP)] 
         outputFromListConnector = sim.FromListConnector(outputConnector)
         sim.Projection(outputSpikeSequence, outputLayer, outputFromListConnector, 
                    receptor_type='excitatory')
@@ -235,7 +265,7 @@ Parameters: PyNN.nest created spike sequence
 def build_testing_connections(testSpikeSources, data, testInputLayer):
     numberDataItems = len(data)
 
-    # Loop through all data elements (75 for iris test data)
+    # Loop through all data elements (89 for wine test data)
     for element in range (0, numberDataItems):
         dataItem = data[element]
 
@@ -345,16 +375,15 @@ def save_results(layer, file):
 wineTrainingData = read_file(TRAINING_FILE)
 wineTestingData = read_file(TESTING_FILE)
 
-print(wineTrainingData)
-"""
+
 # === Initialize the network for training ===
 initialize_network(TIME_STEP, MIN_DELAY, MAX_DELAY)
 
-spikeSequence = create_spike_sequence(irisTrainingData, TRAINING_START_TIME, LEARNING_OFFSET)
+spikeSequence = create_spike_sequence(wineTrainingData, TRAINING_START_TIME, LEARNING_OFFSET)
 inputLayer = create_layer_of_neurons(INPUT_LAYER_NEURONS, 'input layer')
 outputLayer = create_layer_of_neurons(OUTPUT_LAYER_NEURONS, 'output layer')
 
-build_network_connections(spikeSequence, irisTrainingData, inputLayer, outputLayer)
+build_network_connections(spikeSequence, wineTrainingData, inputLayer, outputLayer)
 connect_layers(inputLayer, outputLayer)
 
 record_spikes(inputLayer)
@@ -362,8 +391,8 @@ record_spikes(outputLayer)
 
 sim.run(TRAINING_TIME)
 
-save_results(inputLayer, 'results/input')
-save_results(outputLayer, 'results/output')
+save_results(inputLayer, 'results/wineInput')
+save_results(outputLayer, 'results/wineOutput')
 
 # Save the weights after training
 synapseWeights = synapses.get(["weight"], format="list")
@@ -372,15 +401,16 @@ synapseWeights = synapses.get(["weight"], format="list")
 #print(synapseWeights)
 
 sim.reset()
+
 # === Training is done, weights are saved and network is reset ===
 # === Test the network ===
 initialize_network(TIME_STEP, MIN_DELAY, MAX_DELAY)
 
-testSpikeSequence = create_test_spike_sequence(irisTestingData, TESTING_START_TIME)
+testSpikeSequence = create_test_spike_sequence(wineTestingData, TESTING_START_TIME)
 testInputLayer = create_layer_of_neurons(INPUT_LAYER_NEURONS, 'test input layer')
 testOutputLayer = create_layer_of_neurons(OUTPUT_LAYER_NEURONS, 'test output layer')
 
-build_testing_connections(testSpikeSequence, irisTestingData, testInputLayer)
+build_testing_connections(testSpikeSequence, wineTestingData, testInputLayer)
 
 # Connects layers using weights that were generated during training using STDP synapse
 connect_testing_layers(testInputLayer, testOutputLayer, synapseWeights)
@@ -390,9 +420,8 @@ record_spikes(testOutputLayer)
 
 sim.run(TESTING_TIME)
 
-save_results(testInputLayer, 'results/inputTest')
-save_results(testOutputLayer, 'results/outputTest')
+save_results(testInputLayer, 'results/inputWineTest')
+save_results(testOutputLayer, 'results/outputWineTest')
 
 sim.reset()
 # === End of program ===
-"""
