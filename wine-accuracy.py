@@ -34,8 +34,8 @@ TESTING_RESULTS_FILE = 'results/outputWineTest.pkl'
 TESTING_FILE = 'wine-test.txt'
 
 # === Time variables ===
-# FIRING_PERIOD should be the same as in snn-stdp.py used during training
-FIRING_PERIOD = 27.0 #ms
+# FIRING_PERIOD should be the same as in snn-wines.py used during training
+FIRING_PERIOD = 25.0 #ms
 START_TIME = 10.0 #ms
 
 # === Functions ===
@@ -214,6 +214,6 @@ systemAnswers = convert_rates_to_answers(firingRates)
 print(systemAnswers)
 
 # === Print the correct answers and accuracy percentage ===
-#get_networks_accuracy(systemAnswers, correctAnswers)
+get_networks_accuracy(systemAnswers, correctAnswers)
 
 # === End of program ===

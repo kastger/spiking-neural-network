@@ -32,9 +32,9 @@ TRAINING_FILE = "wine-train.txt"
 TESTING_FILE = "wine-test.txt"
 
 # === Simulation time and epochs ===
-TRAINING_TIME = 50000.0 #ms
-TESTING_TIME = 15000.0 #ms
-FIRING_PERIOD = 40.0 #ms
+TRAINING_TIME = 8000.0 #ms
+TESTING_TIME = 4000.0 #ms
+FIRING_PERIOD = 25.0 #ms
 
 TRAINING_EPOCHS = 20
 
@@ -42,7 +42,7 @@ TRAINING_START_TIME = 10.0 #ms (error when 0)
 TESTING_START_TIME = 10.0 #ms
 
 # === Number of neurons for each layer ===
-INPUT_LAYER_NEURONS = 520
+INPUT_LAYER_NEURONS = 338
 OUTPUT_LAYER_NEURONS = 3
 
 NEURONS_PER_FEATURE = 26
@@ -54,6 +54,7 @@ synapses = 0 # Used to save weights during training
 TIME_STEP = 0.1 #ms
 MIN_DELAY = 0.1 #ms
 MAX_DELAY = 0.1 #ms
+DELAY = 0.1     #ms
 LEARNING_OFFSET = 1.0
 
 # === Firing weight for connections ===
@@ -299,12 +300,9 @@ def connect_layers(firstLayer, secondLayer):
     # Minimum synaptic weight
     w_min = 0.0
     # Maximum synaptic weight
-    w_max = 0.1
+    w_max = 1.0
     # Default weight
     w_default = 0.0
-
-    # === Delay ===
-    delay = 0.1
 
     # Synapses to use later for testing
     global synapses
@@ -317,7 +315,7 @@ def connect_layers(firstLayer, secondLayer):
         weight_dependence = sim.AdditiveWeightDependence(w_min = w_min, w_max = w_max),
         dendritic_delay_fraction = 1.0,
         weight = w_default,
-        delay  = delay)
+        delay  = DELAY)
 
     # Save synapses onto a global variable
     synapses = sim.Projection(inputLayer, outputLayer, sim.AllToAllConnector(), synapse_type = stdp_synapse)
@@ -398,7 +396,7 @@ save_results(outputLayer, 'results/wineOutput')
 synapseWeights = synapses.get(["weight"], format="list")
 
 # Can print it to console to check for inactive neurons
-#print(synapseWeights)
+# print(synapseWeights)
 
 sim.reset()
 
